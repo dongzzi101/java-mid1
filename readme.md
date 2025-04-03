@@ -1,5 +1,6 @@
 ### [섹션 2. Object 클래스](#섹션-2-object-클래스)
 ### [섹션 3. 불변 객체](#섹션-3-불변-객체)
+### [섹션 4. String 클래스](#섹션-4-string-클래스)
 
 ---
 # **섹션 2. Object 클래스**
@@ -209,6 +210,143 @@ Address b = new Address("서울"); // 새로운 객체 생성
 ### **정리**
 - 불변 객체는 **객체 공유로 인한 사이드 이펙트를 방지**할 수 있음
 - 불변이라는 제약 조건이 **의도치 않은 상태 변경을 막아 안전한 코드 작성**이 가능
+
+---
+
+# **섹션 4. String 클래스**
+
+## **String 클래스 - 기본**
+
+자바에서 **문자**를 다루는 대표적인 타입:
+1. **char**
+2. **String**
+
+### **문자열 생성 방법**
+```java
+String str1 = "hello";              // 리터럴 방식
+String str2 = new String("hello");  // new 키워드 사용
+```
+
+> **참고:** 자바 9 버전 이후 `char[]` 대신 `byte[]` 사용
+> - `char`는 **2byte** 차지 → `byte[]` 사용으로 메모리 효율성 증가
+
+### **String 주요 메서드**
+- `length()`
+- `charAt(int index)`
+- `substring(int beginIndex, int endIndex)`
+- `indexOf(String str)`
+- `toLowerCase()`, `toUpperCase()`
+- `trim()`
+- `concat(String str)`
+
+---
+
+## **String 클래스 - 비교**
+
+문자열 비교 시 `==` 비교가 아닌 **항상 `equals()` 비교**해야 함
+
+### **문자열 리터럴 & 문자열 풀(String Pool)**
+- 문자열 리터럴을 사용하면 **문자열 풀**을 통해 메모리 최적화
+- 자바는 실행 시 **문자열 풀**에 `String` 인스턴스를 미리 생성
+- **같은 문자열이 존재하면 새로운 객체를 만들지 않고 기존 인스턴스를 재사용**
+
+> **따라서, 문자열 리터럴을 사용할 경우 `==` 비교 성공**
+
+> **참고:**
+> - 문자열 풀은 **힙(Heap) 영역** 사용
+> - 문자열을 찾을 때 **해시(Hash) 알고리즘**을 사용해 빠르게 검색 가능
+
+---
+
+## **String 클래스 - 불변 객체(Immutable Object)**
+
+### **String은 불변 객체**
+- **한 번 생성된 `String` 객체는 내부 값 변경 불가**
+- 새로운 문자열을 만들면 **새로운 객체가 생성됨**
+
+### **불변 객체로 설계된 이유**
+- **문자열 풀**에서 공유되는 `String` 인스턴스가 변경되면 **다른 변수에도 영향을 미침 → 사이드 이펙트 발생**
+
+---
+
+## **String 클래스 - 주요 메서드**
+
+### **문자열 정보 조회**
+- `length()`, `charAt(int index)`, `substring()`, `indexOf()`
+
+### **문자열 비교**
+- `equals()`, `compareTo()`
+
+### **문자열 검색**
+- `contains()`, `startsWith()`, `endsWith()`
+
+### **문자열 분할 및 조합**
+- `split()`, `join()`, `concat()`
+
+> **참고:**
+> - `CharSequence`는 `String`, `StringBuilder`의 상위 타입
+> - **다양한 문자열 관련 객체를 처리할 수 있도록 설계됨**
+
+---
+
+## **StringBuilder - 가변 String**
+
+### **불변인 `String`의 단점**
+- 문자열을 더하거나 변경할 때 **새로운 객체를 계속 생성** → **비효율적**
+
+### **해결 방법: `StringBuilder` 사용**
+```java
+StringBuilder sb = new StringBuilder("Hello");
+sb.append(" World");  // 기존 객체 내부에서 수정됨
+```
+
+### **가변 객체 vs 불변 객체**
+| 구분 | 특징 |
+|------|------|
+| **String** | 불변(Immutable) |
+| **StringBuilder** | 가변(Mutable) → **추가, 삭제, 수정 가능** → 성능 향상 (단, 사이드 이펙트 주의) |
+
+---
+
+## **String 최적화**
+
+### **자바 컴파일러의 최적화**
+- **문자열 리터럴 + 연산 시 컴파일러가 자동 최적화**
+- **런타임에 별도의 문자열 결합 연산 수행 X → 성능 향상**
+
+### **`StringBuilder`를 직접 사용하는 것이 좋은 경우**
+- **반복문**에서 반복적으로 문자열을 연결할 때
+- **조건문**을 통해 동적으로 문자열을 조합할 때
+- **복잡한 문자열 일부를 변경해야 할 때**
+- **대용량 문자열을 다룰 때**
+
+> **참고:** `StringBuilder vs StringBuffer`
+> - `StringBuffer`는 **동기화(synchronized)** 지원 → **멀티 스레드 환경에서 안전**
+> - `StringBuilder`는 동기화 없음 → **싱글 스레드 환경에서 성능 우수**
+
+---
+
+## **메서드 체이닝 (Method Chaining)**
+
+**메서드 체이닝 기법**을 사용하면 **가독성이 좋아지고 코드가 간결해짐**
+
+```java
+StringBuilder sb = new StringBuilder();
+sb.append("Hello").append(" World").append("!");
+System.out.println(sb.toString());
+```
+
+> **참고:**
+> - `StringBuilder.append()` 메서드는 자기 자신의 참조값을 반환
+> - **연속적으로 메서드를 호출할 수 있도록 설계됨**
+
+---
+
+### 📌 **정리**
+- `String`은 **불변(Immutable)** 객체 → 한 번 생성되면 변경 불가
+- 문자열을 다룰 때 문자열 풀(String Pool)을 활용해 최적화
+- 문자열 조작이 많을 경우 **`StringBuilder` 사용 권장**
+- 메서드 체이닝을 활용하면 **가독성과 코드 효율성 향상**
 
 ---
 
