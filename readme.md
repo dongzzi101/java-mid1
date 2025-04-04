@@ -350,4 +350,130 @@ System.out.println(sb.toString());
 - 메서드 체이닝을 활용하면 **가독성과 코드 효율성 향상**
 
 ---
+## 섹션 5. 래퍼 클래스, Class 클래스
+
+---
+
+### 1. 래퍼 클래스 - 기본형의 한계
+
+#### 기본형의 한계 1
+- 객체가 아니므로 객체 지향 프로그래밍의 장점을 살릴 수 없음
+    - 메서드 제공 불가
+    - 컬렉션 프레임워크 사용 불가
+    - 제네릭 사용 불가
+    - null 값을 가질 수 없음 (값이 없음 상태 표현 불가)
+
+#### 기본형의 한계 2
+- 기본형은 항상 값을 가져야 함
+- 참조형은 null 사용 가능 (단, NullPointerException 주의)
+
+---
+
+### 2. 자바 래퍼 클래스
+
+기본형을 객체로 감싸서 편리하게 사용할 수 있도록 도와주는 클래스.  
+→ 기본형의 객체 버전
+
+#### 특징
+- 불변 객체
+- equals()로 동등성 비교
+- toString() 메서드 오버라이딩
+- 내부적으로 캐시된 값 사용 (예: Integer.valueOf(10) → 같은 인스턴스 반환 가능)
+
+#### 박싱(Boxing) & 언박싱(Unboxing)
+- 박싱: 기본형 → 래퍼 클래스
+- 언박싱: 래퍼 클래스 → 기본형
+
+```java
+Integer boxed = Integer.valueOf(10); // 박싱
+int primitive = boxed.intValue();    // 언박싱
+```
+
+비교는 항상 equals() 사용
+
+---
+
+### 3. 오토 박싱(Auto Boxing)
+
+컴파일러가 개발자를 대신해 valueOf(), xxxValue() 등의 코드를 자동으로 추가
+
+```java
+Integer a = 10; // 오토 박싱
+int b = a;      // 오토 언박싱
+```
+
+---
+
+### 4. 주요 메서드와 성능
+
+#### valueOf() vs parseInt()
+- valueOf(): 래퍼 클래스 반환
+- parseInt(): 기본형 반환
+
+```java
+Integer wrapper = Integer.valueOf("10");
+int primitive = Integer.parseInt("10");
+```
+
+#### 성능
+- 래퍼 클래스는 객체이므로 메모리 사용량이 많음
+- 내부에 기본형 값뿐 아니라 객체 메타데이터도 포함
+
+---
+
+### 5. Class 클래스
+
+클래스의 메타데이터를 다루는 클래스.  
+실행 중 클래스의 속성과 메서드에 대한 정보를 조회하거나 조작할 수 있음.
+
+#### 주요 기능
+1. 타입 정보 조회: 클래스 이름, 슈퍼클래스, 인터페이스, 접근 제한자 등
+2. 리플렉션: 클래스에 정의된 메서드, 필드, 생성자 등을 조회하고 실행
+3. 동적 로딩과 생성: `Class.forName()`으로 클래스 로드, `newInstance()`로 객체 생성
+4. 애노테이션 처리: 클래스에 적용된 애노테이션을 조회하고 활용 가능
+
+```java
+Class<?> clazz = Class.forName("java.lang.String");
+System.out.println(clazz.getName());
+```
+
+---
+
+### 6. System 클래스
+
+시스템과 관련된 기본 기능을 제공하는 클래스
+
+#### 주요 기능
+- 표준 입출력, 오류 출력
+- 시간 측정 (`System.currentTimeMillis()`)
+- 환경 변수, 시스템 속성 접근
+- 시스템 종료 (`System.exit(0)`)
+- 배열 고속 복사 (`System.arraycopy()`)
+
+---
+
+### 7. Math, Random 클래스
+
+#### Math 클래스
+수학 계산에 필요한 다양한 메서드 제공
+
+- 기본 연산: abs(), max(), min()
+- 지수/로그: exp(), log(), log10(), pow()
+- 반올림/정밀도: ceil(), floor(), round(), rint()
+- 삼각 함수: sin(), cos(), tan()
+- 기타: sqrt(), cbrt(), random()
+
+※ 정밀한 계산이 필요할 경우 BigDecimal 사용
+
+#### Random 클래스
+
+- Math.random()보다 더 다양한 랜덤 값을 생성할 수 있음
+- Seed(시드) 값을 지정하면 항상 같은 랜덤 값 생성 가능 → 테스트에 유용
+
+```java
+Random random = new Random(42);
+int num = random.nextInt(100); // 0~99 사이의 랜덤 정수
+```
+
+---
 
