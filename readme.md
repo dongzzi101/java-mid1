@@ -884,9 +884,3 @@ Object
 - 처리할 수 없는 예외가 많아짐
 - `throws Exception` 사용 시 모든 체크 예외가 무력화되어, **중요한 예외를 놓칠 위험**
 - 체크 예외는 **명확한 복구 로직이 있는 경우에만 사용**하는 것이 좋음
-
----
-
-### 출처
-이 내용은 [인프런의 "자바 예외 처리" 강의](https://www.inflearn.com/courses/lecture?courseId=333308&type=LECTURE&unitId=212295&tab=curriculum&subtitleLanguage=ko)에서 학습한 내용을 바탕으로 작성되었습니다.
-
